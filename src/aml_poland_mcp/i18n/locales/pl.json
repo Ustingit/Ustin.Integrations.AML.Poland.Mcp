@@ -69,6 +69,16 @@
     "footer_retention": "Dokument wraz z dokumentacją źródłową należy przechowywać przez okres 5 lat zgodnie z art. 49 Ustawy AML.",
     "footer_generator": "Wygenerowano automatycznie przez AML Poland MCP"
   },
+  "risk_factor": {
+    "sanctions_hit": "Wykryto dopasowanie na liście sankcyjnej",
+    "pep_hit": "Osoba zajmująca eksponowane stanowisko polityczne (PEP)",
+    "company_in_liquidation_or_bankruptcy": "Podmiot jest w likwidacji lub upadłości",
+    "company_suspended": "Działalność podmiotu jest zawieszona",
+    "vat_not_registered": "Podmiot nie jest zarejestrowany jako podatnik VAT",
+    "beneficial_ownership_not_verified": "Nie udało się automatycznie zweryfikować struktury beneficjentów rzeczywistych (CRBR)",
+    "high_risk_industry": "Klient działa w branży podwyższonego ryzyka",
+    "high_risk_country": "Powiązanie z krajem podwyższonego ryzyka"
+  },
   "tool": {
     "invalid_nip": "Nieprawidłowy NIP: '{value}'. NIP musi składać się z 10 cyfr i mieć poprawną sumę kontrolną.",
     "invalid_krs": "Nieprawidłowy numer KRS: '{value}'. Numer KRS musi składać się z 10 cyfr.",
