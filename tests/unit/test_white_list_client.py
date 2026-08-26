@@ -21,6 +21,7 @@ async def test_active_vat_payer() -> None:
                     "subject": {
                         "statusVat": "Czynny",
                         "accountNumbers": ["18101014690032611391200000"],
+                        "krs": "0000028860",
                     }
                 }
             },
@@ -29,6 +30,7 @@ async def test_active_vat_payer() -> None:
     result = await white_list_client.check_vat_status("5260250274", SETTINGS)
     assert result.vat_status == VatStatus.ACTIVE
     assert result.bank_accounts == ["18101014690032611391200000"]
+    assert result.krs == "0000028860"
 
 
 @pytest.mark.asyncio

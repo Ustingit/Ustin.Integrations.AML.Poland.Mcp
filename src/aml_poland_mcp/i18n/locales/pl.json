@@ -82,6 +82,9 @@
   "tool": {
     "invalid_nip": "Nieprawidłowy NIP: '{value}'. NIP musi składać się z 10 cyfr i mieć poprawną sumę kontrolną.",
     "invalid_krs": "Nieprawidłowy numer KRS: '{value}'. Numer KRS musi składać się z 10 cyfr.",
+    "missing_identifier": "Podaj przynajmniej jeden identyfikator: NIP lub KRS.",
+    "company_not_found": "Nie znaleziono podmiotu o identyfikatorze {identifier} w KRS ani CEIDG.",
+    "krs_names_masked": "Publiczne API KRS maskuje dane osobowe reprezentantów (np. „J*****”); aby zweryfikować ich sankcyjnie, podaj pełne imiona i nazwiska w parametrze additional_persons_to_screen.",
     "krs_not_found": "Nie znaleziono podmiotu o numerze KRS {krs} w Krajowym Rejestrze Sądowym.",
     "krs_error": "Błąd podczas pobierania danych z KRS: {error}",
     "ceidg_not_found": "Nie znaleziono podmiotu o numerze NIP {nip} w CEIDG.",

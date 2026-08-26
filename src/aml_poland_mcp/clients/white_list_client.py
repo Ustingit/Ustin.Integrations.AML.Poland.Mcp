@@ -2,6 +2,11 @@
 
 Endpoint: https://wl-api.mf.gov.pl/api/search/nip/{nip}?date=YYYY-MM-DD
 Public, no API key required (rate-limited to 300 requests/day per the ministry's docs).
+
+Also verified: the response includes the subject's KRS number when it has one
+(e.g. querying by NIP returns `"krs": "0000028860"`). Since api-krs.ms.gov.pl
+only supports lookup *by* KRS number, not by NIP, this is what lets
+company_verification.py resolve "I only have a NIP" into a KRS lookup.
 """
 
 from __future__ import annotations
@@ -21,9 +26,12 @@ _STATUS_MAP = {
 
 
 class WhiteListResult:
-    def __init__(self, vat_status: VatStatus, bank_accounts: list[str]) -> None:
+    def __init__(
+        self, vat_status: VatStatus, bank_accounts: list[str], krs: str | None = None
+    ) -> None:
         self.vat_status = vat_status
         self.bank_accounts = bank_accounts
+        self.krs = krs
 
 
 async def check_vat_status(nip: str, settings: Settings) -> WhiteListResult:
@@ -47,4 +55,5 @@ def _parse_response(payload: dict[str, Any]) -> WhiteListResult:
     return WhiteListResult(
         vat_status=status,
         bank_accounts=list(subject.get("accountNumbers") or []),
+        krs=subject.get("krs") or None,
     )

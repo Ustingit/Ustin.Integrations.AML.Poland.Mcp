@@ -82,6 +82,9 @@
   "tool": {
     "invalid_nip": "Invalid NIP: '{value}'. A NIP must be 10 digits with a valid checksum.",
     "invalid_krs": "Invalid KRS number: '{value}'. A KRS number must be 10 digits.",
+    "missing_identifier": "Provide at least one identifier: NIP or KRS.",
+    "company_not_found": "No entity found for identifier {identifier} in KRS or CEIDG.",
+    "krs_names_masked": "The public KRS API masks representatives' personal data (e.g. \"J*****\"); to screen them against sanctions lists, provide their full names via the additional_persons_to_screen parameter.",
     "krs_not_found": "No entity found for KRS number {krs} in the National Court Register.",
     "krs_error": "Error fetching data from KRS: {error}",
     "ceidg_not_found": "No entity found for NIP {nip} in CEIDG.",
