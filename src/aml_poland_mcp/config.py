@@ -12,11 +12,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="AML_", env_file=".env", extra="ignore")
 
-    # Client-facing language. Reports and tool responses default to Polish
-    # (the accountants using this server operate under Polish AML law) but
-    # can be switched to English per-request or via this default.
-    default_language: str = "pl"
-
     # External registry endpoints (all public, no API key required unless noted).
     krs_api_base: str = "https://api-krs.ms.gov.pl/api/krs"
     ceidg_api_base: str = "https://dane.biznes.gov.pl/api/ceidg/v2"
@@ -45,10 +40,6 @@ class Settings(BaseSettings):
     # Sanctions/PEP matching threshold (0.0-1.0). Scores at or above this are
     # treated as a hit requiring manual review.
     sanctions_match_threshold: float = 0.7
-
-    # Where generated Markdown/PDF risk cards are written when a tool is asked
-    # to persist output to disk (in addition to returning content inline).
-    output_dir: str = "./output"
 
 
 def get_settings() -> Settings:
