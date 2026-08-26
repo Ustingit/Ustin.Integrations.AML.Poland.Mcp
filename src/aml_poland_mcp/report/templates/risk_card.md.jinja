@@ -1,0 +1,92 @@
+{# Client-facing AML risk card. All copy comes from i18n via the t() global -- #}
+{# do not hardcode strings here, add locale keys instead. #}
+# {{ t("report.title") }}
+
+*{{ t("report.subtitle") }}*
+
+**{{ t("report.generated_at") }}:** {{ generated_at.strftime("%Y-%m-%d %H:%M UTC") }}
+
+---
+
+## {{ t("report.company_section") }}
+
+| | |
+|---|---|
+| **{{ t("report.company_name") }}** | {{ company.name }} |
+| **{{ t("report.nip") }}** | {{ company.nip or t("common.not_available") }} |
+| **{{ t("report.krs") }}** | {{ company.krs or t("common.not_available") }} |
+| **{{ t("report.regon") }}** | {{ company.regon or t("common.not_available") }} |
+| **{{ t("report.legal_form") }}** | {{ company.legal_form or t("common.not_available") }} |
+| **{{ t("report.address") }}** | {{ company.address or t("common.not_available") }} |
+| **{{ t("report.registration_status") }}** | {{ t("company_status." ~ company.status) }} |
+| **{{ t("report.vat_status") }}** | {{ t("vat_status." ~ company.vat_status) }} |
+{% if company.bank_accounts -%}
+| **{{ t("report.bank_accounts") }}** | {{ company.bank_accounts | join(", ") }} |
+{% endif %}
+
+{% if company.representatives %}
+## {{ t("report.representatives_section") }}
+
+| {{ t("report.representative_name") }} | {{ t("report.representative_function") }} |
+|---|---|
+{% for rep in company.representatives -%}
+| {{ rep.first_name }} {{ rep.last_name }} | {{ rep.function }} |
+{% endfor %}
+{% endif %}
+
+## {{ t("report.beneficiaries_section") }}
+
+{% if crbr.beneficiaries -%}
+| {{ t("report.beneficiary_name") }} | {{ t("report.beneficiary_citizenship") }} | {{ t("report.beneficiary_control_type") }} |
+|---|---|---|
+{% for b in crbr.beneficiaries -%}
+| {{ b.first_name }} {{ b.last_name }} | {{ b.citizenship | join(", ") if b.citizenship else t("common.not_available") }} | {% for c in b.control %}{{ c.ownership_type_description or c.ownership_type or "" }}{% if c.measure_unit_description %} ({{ c.measure_unit_description }}){% endif %}{% if not loop.last %}; {% endif %}{% endfor %} |
+{% endfor %}
+{% elif crbr.status == "manual_verification_required" -%}
+*{{ crbr.message }}*
+{% else -%}
+*{{ t("report.no_beneficiaries") }}*
+{% endif %}
+
+## {{ t("report.screening_section") }}
+
+{% for s in screenings %}
+**{{ t("report.screened_person") }}:** {{ s.query_name }}
+
+{% if s.matches -%}
+{% for m in s.matches -%}
+- **{{ t("report.match_found") }}** -- {{ m.matched_name }} ({{ m.source_list }}, {{ t("report.match_score") }}: {{ "%.0f" | format(m.score * 100) }}%){% if m.is_pep %}, {{ t("report.pep_result") }}{% endif %}
+
+{% endfor %}
+{% else -%}
+{{ t("report.no_match") }}
+
+{% endif %}
+{% for key, params in s.skipped_sources -%}
+> {{ t(key, **params) }}
+{% endfor %}
+{% endfor %}
+
+## {{ t("report.risk_assessment_section") }}
+
+**{{ t("report.overall_risk") }}:** {{ t("risk_level." ~ assessment.level) }}
+
+**{{ t("report.recommended_procedure") }}:** {{ t("due_diligence." ~ assessment.procedure) }}
+
+**{{ t("report.risk_factors") }}:**
+
+{% if assessment.factors -%}
+{% for f in assessment.factors -%}
+- {{ t(f) }}
+{% endfor %}
+{% else -%}
+*{{ t("report.no_risk_factors") }}*
+{% endif %}
+
+---
+
+*{{ t("report.disclaimer") }}*
+
+*{{ t("report.footer_retention") }}*
+
+{{ t("report.footer_generator") }}
