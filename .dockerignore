@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.github/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+tests/
+output/
+reports/
+*.pdf
+.env
+.env.*
+!.env.example
