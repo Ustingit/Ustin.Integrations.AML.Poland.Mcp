@@ -83,6 +83,7 @@
     "crbr_not_public": "Dane CRBR dla tego podmiotu nie są dostępne w wyszukiwarce publicznej (wymagany dostęp uwierzytelniony).",
     "sanctions_clear": "Brak dopasowań na listach sankcyjnych i PEP.",
     "sanctions_hit": "Wykryto {count} potencjalne dopasowanie/a wymagające ręcznej weryfikacji.",
-    "sanctions_error": "Błąd podczas sprawdzania list sankcyjnych: {error}"
+    "sanctions_error": "Błąd podczas sprawdzania list sankcyjnych: {error}",
+    "sanctions_not_configured": "Sprawdzenie międzynarodowych list sankcyjnych (OpenSanctions) pominięte: brak skonfigurowanego klucza API (AML_OPENSANCTIONS_API_KEY)."
   }
 }

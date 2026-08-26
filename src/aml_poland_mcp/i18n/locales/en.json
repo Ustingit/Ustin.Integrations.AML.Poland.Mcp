@@ -83,6 +83,7 @@
     "crbr_not_public": "CRBR data for this entity is not available via the public search (authenticated access required).",
     "sanctions_clear": "No matches found on sanctions or PEP lists.",
     "sanctions_hit": "{count} potential match(es) found requiring manual review.",
-    "sanctions_error": "Error checking sanctions lists: {error}"
+    "sanctions_error": "Error checking sanctions lists: {error}",
+    "sanctions_not_configured": "International sanctions check (OpenSanctions) skipped: no API key configured (AML_OPENSANCTIONS_API_KEY)."
   }
 }

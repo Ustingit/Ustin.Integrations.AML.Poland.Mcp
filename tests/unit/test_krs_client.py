@@ -85,6 +85,13 @@ async def test_fetch_company_upstream_error_raises() -> None:
 
 
 def test_liquidation_status_detected() -> None:
-    extract = {"odpis": {"dane": {"dzial1": {"danePodmiotu": {"nazwa": "X"}}, "dzial6": {"likwidacja": {}}}}}
+    extract = {
+        "odpis": {
+            "dane": {
+                "dzial1": {"danePodmiotu": {"nazwa": "X"}},
+                "dzial6": {"likwidacja": {}},
+            }
+        }
+    }
     company = krs_client._parse_extract(extract, "0000000001")
     assert company.status == CompanyStatus.LIQUIDATION

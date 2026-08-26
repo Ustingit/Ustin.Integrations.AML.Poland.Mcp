@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class CompanyStatus(str, Enum):
+class CompanyStatus(StrEnum):
     ACTIVE = "active"
     SUSPENDED = "suspended"
     LIQUIDATION = "liquidated"
@@ -17,7 +17,7 @@ class CompanyStatus(str, Enum):
     UNKNOWN = "unknown"
 
 
-class VatStatus(str, Enum):
+class VatStatus(StrEnum):
     ACTIVE = "active"
     EXEMPT = "exempt"
     NOT_REGISTERED = "not_registered"
@@ -68,7 +68,7 @@ class Beneficiary(BaseModel):
     control: list[ControlNature] = Field(default_factory=list)
 
 
-class CrbrLookupStatus(str, Enum):
+class CrbrLookupStatus(StrEnum):
     FOUND = "found"
     NO_BENEFICIARIES = "no_beneficiaries"
     MANUAL_VERIFICATION_REQUIRED = "manual_verification_required"
@@ -93,6 +93,9 @@ class SanctionMatch(BaseModel):
 class ScreeningResult(BaseModel):
     query_name: str
     matches: list[SanctionMatch] = Field(default_factory=list)
+    # Translation keys (with params) for sources that were skipped or degraded,
+    # e.g. a missing OpenSanctions API key. Rendered via i18n at the tool layer.
+    skipped_sources: list[tuple[str, dict[str, str]]] = Field(default_factory=list)
 
     @property
     def has_sanction_hit(self) -> bool:
@@ -103,13 +106,13 @@ class ScreeningResult(BaseModel):
         return any(m.is_pep for m in self.matches)
 
 
-class RiskLevel(str, Enum):
+class RiskLevel(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
 
 
-class DueDiligenceProcedure(str, Enum):
+class DueDiligenceProcedure(StrEnum):
     SDD = "sdd"
     EDD = "edd"
 

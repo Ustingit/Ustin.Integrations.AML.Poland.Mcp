@@ -8,7 +8,7 @@ module, defaulting to Polish with an explicit opt-in to English.
 from __future__ import annotations
 
 import json
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 from typing import Any
 
@@ -19,7 +19,7 @@ FALLBACK_LANGUAGE = "en"
 _LOCALES_DIR = Path(__file__).parent / "locales"
 
 
-@lru_cache(maxsize=None)
+@cache
 def _load_locale(language: str) -> dict[str, Any]:
     path = _LOCALES_DIR / f"{language}.json"
     with path.open(encoding="utf-8") as f:

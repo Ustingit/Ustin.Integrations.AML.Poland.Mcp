@@ -23,8 +23,10 @@ class Settings(BaseSettings):
     white_list_api_base: str = "https://wl-api.mf.gov.pl/api/search"
     crbr_api_base: str = "https://crbr.podatki.gov.pl/adcrbr/api/wyszukajSpolke"
     opensanctions_api_base: str = "https://api.opensanctions.org"
+    # No machine-readable format is published; this is the official HTML page,
+    # scraped directly (see clients/mswia_client.py for the verified table shape).
     mswia_sanctions_list_url: str = (
-        "https://www.gov.pl/attachment/lista-osob-i-podmiotow-objetych-sankcjami.json"
+        "https://www.gov.pl/web/mswia/lista-osob-i-podmiotow-objetych-sankcjami"
     )
 
     # Optional API key for OpenSanctions (higher rate limits / matching API access).

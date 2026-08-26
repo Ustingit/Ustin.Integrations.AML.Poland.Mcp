@@ -12,7 +12,9 @@ from aml_poland_mcp.config import Settings
 USER_AGENT = "aml-poland-mcp/0.1 (+https://github.com/Ustingit/Ustin.Integrations.AML.Poland.Mcp)"
 
 
-def build_client(settings: Settings, *, headers: dict[str, str] | None = None, **kwargs: Any) -> httpx.AsyncClient:
+def build_client(
+    settings: Settings, *, headers: dict[str, str] | None = None, **kwargs: Any
+) -> httpx.AsyncClient:
     return httpx.AsyncClient(
         timeout=settings.http_timeout_seconds,
         headers={"User-Agent": USER_AGENT, **(headers or {})},
