@@ -1,0 +1,85 @@
+{
+  "common": {
+    "yes": "Tak",
+    "no": "Nie",
+    "not_available": "Brak danych",
+    "unknown": "Nieznany"
+  },
+  "risk_level": {
+    "low": "Niskie",
+    "medium": "Średnie",
+    "high": "Wysokie"
+  },
+  "company_status": {
+    "active": "Aktywny",
+    "suspended": "Zawieszony",
+    "liquidated": "W likwidacji",
+    "removed": "Wykreślony",
+    "unknown": "Nieznany"
+  },
+  "vat_status": {
+    "active": "Czynny podatnik VAT",
+    "exempt": "Zwolniony z VAT",
+    "not_registered": "Niezarejestrowany jako podatnik VAT",
+    "unknown": "Status nieznany"
+  },
+  "due_diligence": {
+    "sdd": "Standardowe środki bezpieczeństwa finansowego (SDD)",
+    "edd": "Wzmożone środki bezpieczeństwa finansowego (EDD)"
+  },
+  "report": {
+    "title": "Karta Oceny Ryzyka Klienta (AML)",
+    "subtitle": "Sporządzono zgodnie z Ustawą z dnia 1 marca 2018 r. o przeciwdziałaniu praniu pieniędzy oraz finansowaniu terroryzmu",
+    "generated_at": "Data sporządzenia",
+    "language_note": "Dokument dostępny również w języku angielskim",
+    "company_section": "1. Dane podmiotu",
+    "company_name": "Nazwa",
+    "nip": "NIP",
+    "krs": "KRS",
+    "regon": "REGON",
+    "address": "Adres siedziby",
+    "legal_form": "Forma prawna",
+    "registration_status": "Status w rejestrze",
+    "vat_status": "Status VAT (Biała Lista)",
+    "bank_accounts": "Zgłoszone rachunki bankowe",
+    "representatives_section": "2. Organ reprezentujący",
+    "representative_name": "Imię i nazwisko",
+    "representative_function": "Funkcja",
+    "beneficiaries_section": "3. Beneficjenci rzeczywiści (UBO, CRBR)",
+    "beneficiary_name": "Imię i nazwisko",
+    "beneficiary_share": "Udział w kapitale",
+    "beneficiary_control_type": "Charakter uprawnienia",
+    "beneficiary_citizenship": "Obywatelstwo",
+    "beneficiary_residence": "Kraj zamieszkania",
+    "no_beneficiaries": "Nie znaleziono beneficjentów rzeczywistych w CRBR dla podanego NIP",
+    "screening_section": "4. Wyniki weryfikacji sankcyjnej i PEP",
+    "screened_person": "Osoba",
+    "sanctions_result": "Listy sankcyjne (MSWiA, UE, ONZ, OFAC)",
+    "pep_result": "Status PEP (osoba zajmująca eksponowane stanowisko polityczne)",
+    "match_found": "WYKRYTO DOPASOWANIE",
+    "no_match": "Brak dopasowania",
+    "match_score": "Wynik dopasowania",
+    "risk_assessment_section": "5. Ocena ryzyka",
+    "overall_risk": "Ogólny poziom ryzyka",
+    "risk_factors": "Czynniki ryzyka",
+    "recommended_procedure": "Zalecana procedura należytej staranności",
+    "no_risk_factors": "Nie zidentyfikowano dodatkowych czynników podwyższonego ryzyka",
+    "disclaimer": "Niniejszy dokument stanowi wsparcie procesu oceny ryzyka AML i nie zastępuje analizy przeprowadzonej przez wyznaczonego pracownika ds. AML/compliance w instytucji obowiązanej.",
+    "footer_retention": "Dokument wraz z dokumentacją źródłową należy przechowywać przez okres 5 lat zgodnie z art. 49 Ustawy AML.",
+    "footer_generator": "Wygenerowano automatycznie przez AML Poland MCP"
+  },
+  "tool": {
+    "invalid_nip": "Nieprawidłowy NIP: '{value}'. NIP musi składać się z 10 cyfr i mieć poprawną sumę kontrolną.",
+    "invalid_krs": "Nieprawidłowy numer KRS: '{value}'. Numer KRS musi składać się z 10 cyfr.",
+    "krs_not_found": "Nie znaleziono podmiotu o numerze KRS {krs} w Krajowym Rejestrze Sądowym.",
+    "krs_error": "Błąd podczas pobierania danych z KRS: {error}",
+    "ceidg_not_found": "Nie znaleziono podmiotu o numerze NIP {nip} w CEIDG.",
+    "white_list_error": "Błąd podczas sprawdzania statusu VAT (Biała Lista): {error}",
+    "crbr_no_beneficiaries": "Brak zarejestrowanych beneficjentów rzeczywistych w CRBR dla NIP {nip}.",
+    "crbr_error": "Błąd podczas pobierania danych z CRBR: {error}",
+    "crbr_not_public": "Dane CRBR dla tego podmiotu nie są dostępne w wyszukiwarce publicznej (wymagany dostęp uwierzytelniony).",
+    "sanctions_clear": "Brak dopasowań na listach sankcyjnych i PEP.",
+    "sanctions_hit": "Wykryto {count} potencjalne dopasowanie/a wymagające ręcznej weryfikacji.",
+    "sanctions_error": "Błąd podczas sprawdzania list sankcyjnych: {error}"
+  }
+}
