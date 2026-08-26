@@ -31,6 +31,11 @@ class Settings(BaseSettings):
     # Public/demo usage works without a key for low request volumes.
     opensanctions_api_key: str | None = None
 
+    # CEIDG (sole trader register) requires a JWT bearer token issued by
+    # biznes.gov.pl; there is no anonymous access. Without a key, CEIDG lookups
+    # are skipped (verify_company_basic falls back to KRS-only results).
+    ceidg_api_key: str | None = None
+
     # HTTP behaviour
     http_timeout_seconds: float = 15.0
     http_max_retries: int = 3

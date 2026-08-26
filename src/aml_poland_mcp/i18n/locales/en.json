@@ -14,6 +14,7 @@
     "active": "Active",
     "suspended": "Suspended",
     "liquidated": "In liquidation",
+    "bankruptcy": "In bankruptcy",
     "removed": "Deregistered",
     "unknown": "Unknown"
   },
@@ -74,6 +75,8 @@
     "krs_not_found": "No entity found for KRS number {krs} in the National Court Register.",
     "krs_error": "Error fetching data from KRS: {error}",
     "ceidg_not_found": "No entity found for NIP {nip} in CEIDG.",
+    "ceidg_not_configured": "CEIDG check skipped: no API key configured (AML_CEIDG_API_KEY).",
+    "ceidg_error": "Error fetching data from CEIDG: {error}",
     "white_list_error": "Error checking VAT status (White List): {error}",
     "crbr_no_beneficiaries": "No beneficial owners registered in CRBR for NIP {nip}.",
     "crbr_error": "Error fetching data from CRBR: {error}",

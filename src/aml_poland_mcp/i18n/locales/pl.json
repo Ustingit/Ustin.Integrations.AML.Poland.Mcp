@@ -14,6 +14,7 @@
     "active": "Aktywny",
     "suspended": "Zawieszony",
     "liquidated": "W likwidacji",
+    "bankruptcy": "W upadłości",
     "removed": "Wykreślony",
     "unknown": "Nieznany"
   },
@@ -74,6 +75,8 @@
     "krs_not_found": "Nie znaleziono podmiotu o numerze KRS {krs} w Krajowym Rejestrze Sądowym.",
     "krs_error": "Błąd podczas pobierania danych z KRS: {error}",
     "ceidg_not_found": "Nie znaleziono podmiotu o numerze NIP {nip} w CEIDG.",
+    "ceidg_not_configured": "Sprawdzenie CEIDG pominięte: brak skonfigurowanego klucza API (AML_CEIDG_API_KEY).",
+    "ceidg_error": "Błąd podczas pobierania danych z CEIDG: {error}",
     "white_list_error": "Błąd podczas sprawdzania statusu VAT (Biała Lista): {error}",
     "crbr_no_beneficiaries": "Brak zarejestrowanych beneficjentów rzeczywistych w CRBR dla NIP {nip}.",
     "crbr_error": "Błąd podczas pobierania danych z CRBR: {error}",
