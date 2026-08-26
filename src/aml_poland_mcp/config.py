@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     krs_api_base: str = "https://api-krs.ms.gov.pl/api/krs"
     ceidg_api_base: str = "https://dane.biznes.gov.pl/api/ceidg/v2"
     white_list_api_base: str = "https://wl-api.mf.gov.pl/api/search"
-    crbr_api_base: str = "https://crbr.podatki.gov.pl/api/wyszukaj"
+    crbr_api_base: str = "https://crbr.podatki.gov.pl/adcrbr/api/wyszukajSpolke"
     opensanctions_api_base: str = "https://api.opensanctions.org"
     mswia_sanctions_list_url: str = (
         "https://www.gov.pl/attachment/lista-osob-i-podmiotow-objetych-sankcjami.json"
