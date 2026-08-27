@@ -17,6 +17,7 @@ from io import BytesIO
 from pathlib import Path
 
 import markdown as md
+from bs4 import BeautifulSoup
 from xhtml2pdf import pisa
 
 _FONTS_DIR = Path(__file__).parent / "fonts"
@@ -50,6 +51,7 @@ blockquote {{ color: #555555; border-left: 3px solid #cccccc; padding-left: 8px;
 
 def render_pdf(markdown_text: str) -> bytes:
     html_body = md.markdown(markdown_text, extensions=["tables"])
+    html_body = _fix_details_table_column_widths(html_body)
     html = f"<html><head>{_CSS}</head><body>{html_body}</body></html>"
 
     buffer = BytesIO()
@@ -57,3 +59,31 @@ def render_pdf(markdown_text: str) -> bytes:
     if result.err:
         raise RuntimeError(f"PDF generation failed with {result.err} error(s)")
     return buffer.getvalue()
+
+
+def _fix_details_table_column_widths(html_body: str) -> str:
+    """Work around a real xhtml2pdf table-layout bug.
+
+    The report's first table ("1. Dane podmiotu") is a headerless label/value table
+    whose second column can hold dozens of bank account numbers as one long
+    comma-separated string. Confirmed empirically: without explicit column widths,
+    xhtml2pdf computes a column width once per table (not per row), and that one long
+    cell corrupts the width computed for *every* row -- labels and values render
+    overlapping, wrapped one word per line, across the whole table.
+
+    CSS alone can't fix this: xhtml2pdf's CSS support doesn't include structural
+    pseudo-classes, so `table-layout: fixed` plus `td:first-child`/`:last-child` rules
+    are silently ignored (verified: no effect on output). What xhtml2pdf's table
+    renderer does honour is the legacy HTML `width` attribute directly on `<td>`, so
+    this sets that explicitly on the first table's cells instead.
+    """
+    soup = BeautifulSoup(html_body, "html.parser")
+    table = soup.find("table")
+    if table is None:
+        return html_body
+    for row in table.find_all("tr"):
+        cells = row.find_all("td")
+        if len(cells) >= 2:
+            cells[0]["width"] = "32%"
+            cells[1]["width"] = "68%"
+    return str(soup)
