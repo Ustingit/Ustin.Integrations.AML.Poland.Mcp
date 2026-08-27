@@ -76,6 +76,20 @@ async def test_fetch_company_not_found_returns_none() -> None:
 
 @pytest.mark.asyncio
 @respx.mock
+async def test_fetch_company_dissolved_returns_none() -> None:
+    # Real, verified API behavior: a KRS number for an entity dissolved/merged into
+    # another (e.g. PGNiG S.A., absorbed into PKN Orlen in 2022) returns an empty
+    # HTTP 204 for OdpisAktualny, distinct from 404 -- no current state, but not
+    # "never existed" either. Treated the same as not-found for due-diligence purposes.
+    respx.get(f"{SETTINGS.krs_api_base}/OdpisAktualny/0000059492").mock(
+        return_value=httpx.Response(204)
+    )
+    company = await krs_client.fetch_company_by_krs("0000059492", SETTINGS)
+    assert company is None
+
+
+@pytest.mark.asyncio
+@respx.mock
 async def test_fetch_company_upstream_error_raises() -> None:
     respx.get(f"{SETTINGS.krs_api_base}/OdpisAktualny/0000123456").mock(
         return_value=httpx.Response(500)

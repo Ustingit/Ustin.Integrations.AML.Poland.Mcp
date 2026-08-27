@@ -10,6 +10,14 @@ numbers come back as "J*******" style masks (e.g. `{"nazwiskoICzlon": "F*****"}`
 Full names are NOT available through this API; they must come from the client's
 own KYC documents (as required by the AML Act's identification duty) or from the
 CAPTCHA-protected human-facing search at https://ekrs.ms.gov.pl.
+
+Also verified against the live API: a KRS number that has been fully dissolved or
+absorbed into another entity via merger (e.g. PGNiG S.A., KRS 0000059492, merged
+into PKN Orlen in 2022) returns `HTTP 204` with an empty body for OdpisAktualny --
+distinct from 404, since the number itself is real and has KRS history (an
+OdpisPelny/historical extract still exists), it just has no *current* state. For
+`verify_company_basic`'s purposes -- is there an active entity to run due diligence
+against -- that's equivalent to not found, so it's treated the same way.
 """
 
 from __future__ import annotations
@@ -29,12 +37,10 @@ async def fetch_company_by_krs(krs: str, settings: Settings) -> CompanyBasicInfo
         response = await request_with_retry(
             client, settings, "GET", url, params={"rejestr": "P", "format": "json"}
         )
-    if response.status_code == 404:
+    if response.status_code in (404, 204):
         return None
     if response.status_code != 200:
-        raise UpstreamServiceError(
-            "tool.krs_error", error=f"HTTP {response.status_code}", krs=krs
-        )
+        raise UpstreamServiceError("tool.krs_error", error=f"HTTP {response.status_code}", krs=krs)
     return _parse_extract(response.json(), krs)
 
 
