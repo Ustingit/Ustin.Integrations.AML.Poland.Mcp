@@ -12,12 +12,12 @@
 
 | | |
 |---|---|
-| **{{ t("report.company_name") }}** | {{ company.name }} |
+| **{{ t("report.company_name") }}** | {{ company.name | mdsafe }} |
 | **{{ t("report.nip") }}** | {{ company.nip or t("common.not_available") }} |
 | **{{ t("report.krs") }}** | {{ company.krs or t("common.not_available") }} |
 | **{{ t("report.regon") }}** | {{ company.regon or t("common.not_available") }} |
-| **{{ t("report.legal_form") }}** | {{ company.legal_form or t("common.not_available") }} |
-| **{{ t("report.address") }}** | {{ company.address or t("common.not_available") }} |
+| **{{ t("report.legal_form") }}** | {{ company.legal_form | mdsafe or t("common.not_available") }} |
+| **{{ t("report.address") }}** | {{ company.address | mdsafe or t("common.not_available") }} |
 | **{{ t("report.registration_status") }}** | {{ t("company_status." ~ company.status) }} |
 | **{{ t("report.vat_status") }}** | {{ t("vat_status." ~ company.vat_status) }} |
 {% if company.bank_accounts -%}
@@ -30,7 +30,7 @@
 | {{ t("report.representative_name") }} | {{ t("report.representative_function") }} |
 |---|---|
 {% for rep in company.representatives -%}
-| {{ rep.first_name }} {{ rep.last_name }} | {{ rep.function }} |
+| {{ rep.first_name | mdsafe }} {{ rep.last_name | mdsafe }} | {{ rep.function | mdsafe }} |
 {% endfor %}
 {% endif %}
 
@@ -40,7 +40,7 @@
 | {{ t("report.beneficiary_name") }} | {{ t("report.beneficiary_citizenship") }} | {{ t("report.beneficiary_control_type") }} |
 |---|---|---|
 {% for b in crbr.beneficiaries -%}
-| {{ b.first_name }} {{ b.last_name }} | {{ b.citizenship | join(", ") if b.citizenship else t("common.not_available") }} | {% for c in b.control %}{{ c.ownership_type_description or c.ownership_type or "" }}{% if c.measure_unit_description %} ({{ c.measure_unit_description }}){% endif %}{% if not loop.last %}; {% endif %}{% endfor %} |
+| {{ b.first_name | mdsafe }} {{ b.last_name | mdsafe }} | {{ b.citizenship | map("mdsafe") | join(", ") if b.citizenship else t("common.not_available") }} | {% for c in b.control %}{{ c.ownership_type_description | mdsafe or c.ownership_type | mdsafe or "" }}{% if c.measure_unit_description %} ({{ c.measure_unit_description | mdsafe }}){% endif %}{% if not loop.last %}; {% endif %}{% endfor %} |
 {% endfor %}
 {% elif crbr.status == "manual_verification_required" -%}
 *{{ crbr.message }}*
@@ -51,11 +51,11 @@
 ## {{ t("report.screening_section") }}
 
 {% for s in screenings %}
-**{{ t("report.screened_person") }}:** {{ s.query_name }}
+**{{ t("report.screened_person") }}:** {{ s.query_name | mdsafe }}
 
 {% if s.matches -%}
 {% for m in s.matches -%}
-- **{{ t("report.match_found") }}** -- {{ m.matched_name }} ({{ m.source_list }}, {{ t("report.match_score") }}: {{ "%.0f" | format(m.score * 100) }}%){% if m.is_pep %}, {{ t("report.pep_result") }}{% endif %}
+- **{{ t("report.match_found") }}** -- {{ m.matched_name | mdsafe }} ({{ m.source_list | mdsafe }}, {{ t("report.match_score") }}: {{ "%.0f" | format(m.score * 100) }}%){% if m.is_pep %}, {{ t("report.pep_result") }}{% endif %}
 
 {% endfor %}
 {% else -%}

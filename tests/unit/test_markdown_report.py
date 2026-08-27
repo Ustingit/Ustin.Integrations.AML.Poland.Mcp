@@ -1,3 +1,5 @@
+import markdown as md
+
 from aml_poland_mcp.models import (
     Beneficiary,
     CompanyBasicInfo,
@@ -13,7 +15,7 @@ from aml_poland_mcp.models import (
     VatStatus,
 )
 from aml_poland_mcp.report.data import RiskCardData
-from aml_poland_mcp.report.markdown_report import render_markdown
+from aml_poland_mcp.report.markdown_report import _escape_markdown, render_markdown
 
 DATA = RiskCardData(
     company=CompanyBasicInfo(
@@ -70,6 +72,53 @@ def test_no_beneficiaries_message_rendered() -> None:
     data = DATA.model_copy(update={"crbr": CrbrResult(status=CrbrLookupStatus.NO_BENEFICIARIES)})
     markdown = render_markdown(data, "en")
     assert "No beneficial owners were found in CRBR" in markdown
+
+
+# Regression tests for a real bug found by batch-testing 10 real companies: KRS masks
+# board members' names with literal asterisks (e.g. "K*******"), and a naive
+# interpolation lets CommonMark read those as emphasis/bold markers. Confirmed
+# empirically this wasn't just cosmetic (spurious italics) but actually *dropped*
+# characters from the rendered name (paired "**" sequences got consumed as bold
+# toggles), which is worse: it silently showed less of the mask than KRS actually
+# returned.
+
+
+def test_escape_markdown_escapes_special_chars_and_handles_none() -> None:
+    assert _escape_markdown("K*******") == "K\\*\\*\\*\\*\\*\\*\\*"
+    assert _escape_markdown("A_B|C`D[E]") == "A\\_B\\|C\\`D\\[E\\]"
+    assert _escape_markdown(None) == ""
+    assert _escape_markdown("PRZYKŁADOWA SP. Z O.O.") == "PRZYKŁADOWA SP. Z O.O."
+
+
+def test_masked_representative_name_survives_intact_and_unformatted() -> None:
+    data = DATA.model_copy(
+        update={
+            "company": DATA.company.model_copy(
+                update={
+                    "representatives": [
+                        Representative(
+                            first_name="K*******", last_name="G*******", function="PREZES ZARZĄDU"
+                        )
+                    ]
+                }
+            )
+        }
+    )
+    markdown_text = render_markdown(data, "pl")
+    # the raw markdown must contain the escaped, but fully intact, mask
+    assert "K\\*\\*\\*\\*\\*\\*\\* G\\*\\*\\*\\*\\*\\*\\*" in markdown_text
+
+    html = md.markdown(markdown_text, extensions=["tables"])
+    # isolate just the table cell holding the name -- the report legitimately uses
+    # real <em>/<strong> elsewhere (the italicized subtitle, bold row labels), so
+    # only the mask itself must be free of emphasis/bold and must not have silently
+    # dropped any asterisks
+    name_index = html.index("K*")
+    name_cell = html[name_index - 10 : name_index + 40]
+    assert "<em>" not in name_cell
+    assert "<strong>" not in name_cell
+    assert "K*******" in name_cell
+    assert "G*******" in name_cell
 
 
 def test_manual_verification_message_passed_through() -> None:
