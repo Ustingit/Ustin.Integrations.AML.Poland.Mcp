@@ -1,18 +1,74 @@
 # AML Poland MCP
 
-An [MCP](https://modelcontextprotocol.io) server that automates AML/KYB customer due diligence
-for Polish accounting firms (*biura rachunkowe*), which are obligated institutions
-(*instytucje obowiązane*) under the Polish AML Act (*Ustawa o przeciwdziałaniu praniu pieniędzy
-oraz finansowaniu terroryzmu*).
+*Five registries. One prompt.*
 
-It aggregates the checks a firm is required to run on a new business client — company registry
-status, VAT payer status, beneficial ownership, sanctions and PEP screening — into four MCP
-tools, and generates the client-facing AML risk assessment card (*Karta Oceny Ryzyka Klienta*)
-as Markdown or PDF.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+![MCP server](https://img.shields.io/badge/MCP-server-6b46c1)
 
-Server code, comments, and this document are in English. Report and tool-response content shown
-to the end client defaults to **Polish** and can be switched to **English** per call (see
-`language` parameter on every tool).
+A Polish accounting firm (*biuro rachunkowe*) is an obligated institution under the Polish AML
+Act — same legal category as a bank, just smaller. Before onboarding any client it must check the
+company register, VAT status, beneficial ownership, and sanctions/PEP lists, then produce and
+file a documented risk assessment. Done by hand, that's five different registries, most of them
+across separate tabs, and realistically **60–90 minutes per client** if you do it properly.
+
+**AML Poland MCP** puts all five checks behind an AI assistant. Ask once, get back registry
+status, VAT status, beneficial owners, sanctions/PEP screening, and a signable AML risk card
+(Markdown or PDF) — sourced live from KRS, CEIDG, the Ministry of Finance's White List, CRBR, and
+sanctions lists, not a cached copy.
+
+- **For an independent accounting firm** — install it once in Claude Desktop or Claude Code; every
+  new client afterwards is one prompt instead of a half hour of clicking through registries.
+- **For an accounting-software vendor** — the code is MIT-licensed and embeddable as an
+  integration inside a platform like Comarch Optima, inFakt, or wFirma.
+
+## Quickstart
+
+Requires [uv](https://docs.astral.sh/uv/). Clone the repo, then point your MCP client at it.
+
+**Claude Desktop** (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "aml-poland": {
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/Ustin.Integrations.AML.Poland.Mcp", "run", "aml-poland-mcp"]
+    }
+  }
+}
+```
+
+**Claude Code**, from inside the repo:
+
+```bash
+claude mcp add aml-poland -- uv run aml-poland-mcp
+```
+
+That's it for public-data checks (KRS, White List, MSWiA) — no API keys needed. See
+[Configuration](#configuration) below to unlock CEIDG and international sanctions screening.
+
+## Example
+
+```
+> Check client NIP 7740001454 for AML and generate a risk card.
+
+Checking the court register, the VAT list, the beneficial-owners registry, and
+sanctions lists. Here's the summary:
+
+  Name              ORLEN SPÓŁKA AKCYJNA
+  Registry status   Active
+  VAT status        Active payer
+  Beneficial owners manual check required (CAPTCHA)
+
+  Risk level        Medium
+  Procedure         Standard due diligence
+  Document          risk_card.pdf
+```
+
+The numbers and statuses above are real — this is what `generate_aml_risk_card` actually returned
+for that NIP, checked live against the public registries; the surrounding chat framing is
+illustrative.
 
 ## Tools
 
@@ -25,6 +81,10 @@ to the end client defaults to **Polish** and can be switched to **English** per 
 
 Plus a resource, `aml://rules/aml-checklist` (Polish) / `aml://rules/aml-checklist/en`, describing
 the mandatory due-diligence steps under the Act.
+
+Server code, comments, and this document are in English. Report and tool-response content shown
+to the end client defaults to **Polish** and can be switched to **English** per call (see the
+`language` parameter on every tool).
 
 ## Data sources and their real-world limitations
 
@@ -57,21 +117,13 @@ Some have hard limitations that shape the tool's behavior — they're not bugs:
   ministry renders it as an HTML table on a gov.pl page. This is scraped directly and cached
   in-process for an hour.
 
-## Requirements
+## Running standalone
 
-- Python 3.11+
-- [uv](https://docs.astral.sh/uv/) for dependency management
-
-## Setup
+For development, or to run the server outside an MCP client's own process management:
 
 ```bash
 uv sync
 cp .env.example .env  # optional: add API keys, override endpoints
-```
-
-Run the server (stdio transport, for use with an MCP client like Claude Desktop or Claude Code):
-
-```bash
 uv run aml-poland-mcp
 ```
 
@@ -97,6 +149,13 @@ uv run pytest
 uv run ruff check .
 uv run mypy src/
 ```
+
+## Adopters
+
+Using AML Poland MCP at your firm or inside your product? Open a PR adding yourself below —
+genuinely happy to hear how it's being used.
+
+*(nobody yet — be the first)*
 
 ## Disclaimer
 
